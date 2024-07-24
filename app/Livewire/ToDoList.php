@@ -25,6 +25,10 @@ class ToDoList extends Component {
         $todo->delete();
     }
 
+    public function toggle(Todo $todo) {
+        $todo->update(['completed' => !$todo->completed]);
+    }
+
     public function render() {
         return view('livewire.to-do-list', ['todos' => Todo::latest()->where('name', 'like', "%{$this->search}%")->paginate(5)]);
     }
