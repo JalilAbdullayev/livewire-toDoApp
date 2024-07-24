@@ -5,11 +5,14 @@ namespace App\Livewire;
 use App\Models\Todo;
 use Livewire\Attributes\Rule;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class ToDoList extends Component {
+    use WithPagination;
+
     #[Rule('required|min:3|max:50')]
     public string $name;
-    public string $search;
+    public string $search = '';
 
     public function create() {
         $validated = $this->validateOnly('name');
@@ -19,6 +22,6 @@ class ToDoList extends Component {
     }
 
     public function render() {
-        return view('livewire.to-do-list');
+        return view('livewire.to-do-list', ['todos' => Todo::latest()->where('name', 'like', "%{$this->search}%")->paginate(5)]);
     }
 }
