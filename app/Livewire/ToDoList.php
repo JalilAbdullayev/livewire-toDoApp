@@ -12,7 +12,12 @@ class ToDoList extends Component {
 
     #[Rule('required|min:3|max:50')]
     public string $name;
+
     public string $search = '';
+    public int $todoId;
+
+    #[Rule('required|min:3|max:50')]
+    public string $newName;
 
     public function create() {
         $validated = $this->validateOnly('name');
@@ -27,6 +32,21 @@ class ToDoList extends Component {
 
     public function toggle(Todo $todo) {
         $todo->update(['completed' => !$todo->completed]);
+    }
+
+    public function edit(Todo $todo) {
+        $this->todoId = $todo->id;
+        $this->newName = $todo->name;
+    }
+
+    public function cancel() {
+        $this->reset('todoId', 'newName');
+    }
+
+    public function update() {
+        $this->validateOnly('newName');
+        Todo::find($this->todoId)->update(['name' => $this->newName]);
+        $this->cancel();
     }
 
     public function render() {
