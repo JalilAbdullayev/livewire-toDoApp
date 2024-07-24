@@ -27,8 +27,13 @@ class ToDoList extends Component {
         $this->resetPage();
     }
 
-    public function delete(Todo $todo) {
-        $todo->delete();
+    public function delete($id) {
+        try {
+            Todo::findOrFail($id)->delete();
+        } catch(\Exception $e) {
+            session()->flash('error', 'Task not found!');
+            return;
+        }
     }
 
     public function toggle(Todo $todo) {
