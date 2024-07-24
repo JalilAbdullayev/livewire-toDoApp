@@ -23,7 +23,8 @@ class ToDoList extends Component {
         $validated = $this->validateOnly('name');
         Todo::create($validated);
         $this->reset('name');
-        request()->session()->flash('success', 'Task created successfully!');
+        session()->flash('success', 'Task created successfully!');
+        $this->resetPage();
     }
 
     public function delete(Todo $todo) {
